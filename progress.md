@@ -93,3 +93,20 @@
 - **⚠️ 关键机制（解决"LV11-15 读取关卡失败"的根因）**：`DummyLevelProvider.uc()` 有 `if (fjc) return;`——关卡数据只在 AutoTest 进程启动后**首次加载一次**（`fiz` 缓存）。首次测试时文件是 10 关，缓存了 10 关；之后改成 15 关但缓存未更新，LV11-15 报"读取关卡失败"。**每次改 `levels.json` 后必须重启 AutoTest，新关卡才会被读入。** 重启后全部 15 关通过。
 - 预期流程对齐：①程序生成基础关→②人工微调→③调试参数入库。当前已完成①（生成器+可解性自校验）且**经 AutoTest 真实验证 LV1-15 全胜**。
 - 反编译分析全文见 `反编译分析_ReCarMatch玩法与生成器.md`；用法见 `generator/README.md`。
+
+## 2026-08-25 - Task: 更新关卡结构分析与约束校验资料
+### What was done
+- 新增前 500 关结构统计复现脚本及可执行约束校验器。
+- 新增结构分析报告、完整分析输出和生成器重构说明，供后续生成器迭代使用。
+### Testing
+- `python3 -c "from generator.level_constraints import validate_all; raise SystemExit(validate_all('levels.json'))"`：500 关全部通过，0 违规。
+- `python3 generator/analyze_levels.py levels.json`：输出与 `docs/500关分析输出.txt` 完全一致。
+- `git diff --check`：通过。
+### Notes
+- `generator/level_constraints.py`：新增 500 关验证过的 C1-C11 结构约束。
+- `generator/analyze_levels.py`：新增结构统计复现脚本。
+- `docs/500关结构分析报告.md`：新增 500 关结构分析结论。
+- `docs/500关分析输出.txt`：新增分析脚本的基线输出。
+- `docs/重构方案_给DeepSeek.md`：新增生成器重构参考说明。
+- `progress.md`：追加本次更新和验证记录。
+- 回滚：执行 `git revert <本次提交哈希>` 可撤回本次 GitHub 更新。
