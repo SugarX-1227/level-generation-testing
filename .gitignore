@@ -1,0 +1,13 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Local application builds and analysis tools
+AutoTest.app/
+AutoTest.zip
+LevelJsonEditor.app/
+LevelJsonEditor-macOS-arm64-debug.zip
+_OUT_AUTOTEST/
+_OUT_AUTOTEST.zip
+_tools/
+*.mp4
